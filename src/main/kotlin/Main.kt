@@ -22,7 +22,7 @@ fun main() {
     println("Start of cycle: ${findStartingNodeOfCycle(head)?.value} expected 1)")
     println("~~~~~~~~~~~~~~")
     println("Is 23 happy num: ${findHappyNumber(23)} expected true)")
-    //println("Is 12 happy num: ${findHappyNumber(12)} expected false)")
+    println("Is 12 happy num: ${findHappyNumber(12)} expected false)")
 }
 
 /**
