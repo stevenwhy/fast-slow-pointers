@@ -5,7 +5,14 @@ fun main() {
     head.next!!.next = Node(3)
     head.next!!.next!!.next = Node(4)
     head.next!!.next!!.next!!.next = Node(5)
+
+    println("Middle Node: ${findMiddleNode(head)?.value} expected 3")
     head.next!!.next!!.next!!.next!!.next = Node(6)
+    println("Middle Node: ${findMiddleNode(head)?.value} expected 4")
+    head.next!!.next!!.next!!.next!!.next!!.next = Node(7)
+    println("Middle Node: ${findMiddleNode(head)?.value} expected 4")
+
+
     println("Has cycle: ${linkedListHasCycle(head)} expected false")
     println("~~~~~~~~~~~~~~")
     head.next!!.next!!.next!!.next!!.next!!.next = head.next!!.next
@@ -23,8 +30,32 @@ fun main() {
     println("~~~~~~~~~~~~~~")
     println("Is 23 happy num: ${findHappyNumber(23)} expected true)")
     println("Is 12 happy num: ${findHappyNumber(12)} expected false)")
+
+    println("~~~~~~~~~~~~~~")
+
 }
 
+/**
+ * Given the head of a Singly LinkedList, write a method to return the middle node of the LinkedList.
+ *  If the total number of nodes in the LinkedList is even, return the second middle node.
+ */
+fun findMiddleNode(head: Node): Node? {
+    // We can do this in one traversal by using two pointers.
+    // One can move 1 step and the other 2 steps.
+    // every loop, if fast.next is null then slow is the middle
+    // if fast.next.next is null then slow.next is the middle
+    var slow: Node? = head
+    var fast: Node? = head
+    while(fast != null && slow != null) {
+        if(fast.next == null) return slow
+        else if(fast.next!!.next == null) return slow.next
+        else {
+            fast = fast.next!!.next!!
+            slow = slow.next
+        }
+    }
+    return head
+}
 /**
  * Any number will be called a happy number if,
  *     after repeatedly replacing it with a number equal to the sum of the square of all of its digits,
