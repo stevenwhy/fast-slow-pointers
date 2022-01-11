@@ -6,11 +6,11 @@ fun main() {
     head.next!!.next!!.next = Node(4)
     head.next!!.next!!.next!!.next = Node(5)
 
-    println("Middle Node: ${findMiddleNode(head)?.value} expected 3")
+    println("Middle Node: ${findMiddleNode(head).value} expected 3")
     head.next!!.next!!.next!!.next!!.next = Node(6)
-    println("Middle Node: ${findMiddleNode(head)?.value} expected 4")
+    println("Middle Node: ${findMiddleNode(head).value} expected 4")
     head.next!!.next!!.next!!.next!!.next!!.next = Node(7)
-    println("Middle Node: ${findMiddleNode(head)?.value} expected 4")
+    println("Middle Node: ${findMiddleNode(head).value} expected 4")
 
 
     println("Has cycle: ${linkedListHasCycle(head)} expected false")
@@ -42,6 +42,52 @@ fun main() {
 
     head2.next!!.next!!.next!!.next!!.next = Node(2)
     println("Is palindrome: ${isPalindrome(head2)} expected false")
+
+
+    println("~~~~~~~~~~~~~~")
+    println("Problem Statement 2")
+    val head3 = Node(2)
+    head3.next = Node(4)
+    head3.next!!.next = Node(6)
+    //weirdReversal(head3)
+    head3.printList()
+    head3.next!!.next!!.next = Node(8)
+    //weirdReversal(head3)
+    head3.printList()
+    head3.next!!.next!!.next!!.next = Node(10)
+    //weirdReversal(head3)
+    head3.printList()
+    head3.next!!.next!!.next!!.next!!.next = Node(12)
+    weirdReversal(head3)
+    head3.printList()
+    println("Should be 2 -> 12 -> 4 -> 10 -> 6 -> 8 -> null")
+}
+
+/**
+ * Given the head of a Singly LinkedList,
+ * write a method to modify the LinkedList such that the nodes from the second half of the LinkedList
+ *   are inserted alternately to the nodes from the first half in reverse order.
+ * So if the LinkedList has nodes 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> null,
+ *   your method should return 1 -> 6 -> 2 -> 5 -> 3 -> 4 -> null.
+ */
+fun weirdReversal(head: Node): Node {
+    // first reverse the second half of the linked list
+    // then start placing the nodes from the second half, into the first
+    var firstHalfHead: Node? = head
+    var secondHalfHead: Node? = reverse(findMiddleNode(head))
+
+    while(firstHalfHead != null && secondHalfHead != null) {
+        val tempLeft: Node? = firstHalfHead.next
+        firstHalfHead.next = secondHalfHead
+        firstHalfHead = tempLeft
+
+        val tempRight: Node? = secondHalfHead.next
+        secondHalfHead.next = firstHalfHead
+        secondHalfHead = tempRight
+    }
+    if(firstHalfHead != null) firstHalfHead.next = null
+    return head
+
 }
 /**
  * Given the head of a Singly LinkedList, write a method to check if the LinkedList is a palindrome or not.
@@ -51,7 +97,7 @@ fun isPalindrome(head: Node): Boolean {
     // then we can compare the first half to the second half step by step
     // then reverse the second-half back
     var result = false
-    var secondHalfHead: Node? = reverse(findMiddleNode(head) ?: head)
+    var secondHalfHead: Node? = reverse(findMiddleNode(head))
     val copyOfSecondHalfHead = secondHalfHead
     var firstHalfHead: Node? = head
     while(firstHalfHead != null && secondHalfHead != null) {
@@ -78,7 +124,7 @@ private fun reverse(node: Node): Node? {
  * Given the head of a Singly LinkedList, write a method to return the middle node of the LinkedList.
  *  If the total number of nodes in the LinkedList is even, return the second middle node.
  */
-fun findMiddleNode(head: Node): Node? {
+fun findMiddleNode(head: Node): Node {
     // We can do this in one traversal by using two pointers.
     // One can move 1 step and the other 2 steps.
     // every loop, if fast.next is null then slow is the middle
@@ -87,7 +133,7 @@ fun findMiddleNode(head: Node): Node? {
     var fast: Node? = head
     while(fast != null && slow != null) {
         if(fast.next == null) return slow
-        else if(fast.next!!.next == null) return slow.next
+        else if(fast.next!!.next == null) return slow.next ?: slow
         else {
             fast = fast.next!!.next!!
             slow = slow.next
@@ -182,4 +228,13 @@ fun linkedListHasCycle(head: Node): Boolean {
 class Node(
     val value: Int,
     var next: Node? = null
-)
+) {
+    fun printList() {
+        var temp: Node? = this
+        while (temp != null) {
+            print("${temp.value} -> ")
+            temp = temp.next
+        }
+        println()
+    }
+}
