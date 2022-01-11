@@ -32,9 +32,48 @@ fun main() {
     println("Is 12 happy num: ${findHappyNumber(12)} expected false)")
 
     println("~~~~~~~~~~~~~~")
+    println("Palindrome")
+    val head2 = Node(2)
+    head2.next = Node(4)
+    head2.next!!.next = Node(6)
+    head2.next!!.next!!.next = Node(4)
+    head2.next!!.next!!.next!!.next = Node(2)
+    println("Is palindrome: ${isPalindrome(head2)} expected true")
 
+    head2.next!!.next!!.next!!.next!!.next = Node(2)
+    println("Is palindrome: ${isPalindrome(head2)} expected false")
 }
-
+/**
+ * Given the head of a Singly LinkedList, write a method to check if the LinkedList is a palindrome or not.
+ */
+fun isPalindrome(head: Node): Boolean {
+    // step 1 is to find the middle then reverse the second half of the linked list
+    // then we can compare the first half to the second half step by step
+    // then reverse the second-half back
+    var result = false
+    var secondHalfHead: Node? = reverse(findMiddleNode(head) ?: head)
+    val copyOfSecondHalfHead = secondHalfHead
+    var firstHalfHead: Node? = head
+    while(firstHalfHead != null && secondHalfHead != null) {
+        if(firstHalfHead.value != secondHalfHead.value) break
+        firstHalfHead = firstHalfHead.next
+        secondHalfHead = secondHalfHead.next
+    }
+    if(firstHalfHead == null || secondHalfHead == null) result = true
+    reverse(copyOfSecondHalfHead ?: head)
+    return result
+}
+private fun reverse(node: Node): Node? {
+    var previous: Node? = null
+    var head: Node? = node
+    while(head != null) {
+        val next: Node? = head.next
+        head.next = previous
+        previous = head
+        head = next
+    }
+    return previous
+}
 /**
  * Given the head of a Singly LinkedList, write a method to return the middle node of the LinkedList.
  *  If the total number of nodes in the LinkedList is even, return the second middle node.
